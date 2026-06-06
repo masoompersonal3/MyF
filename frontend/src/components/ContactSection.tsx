@@ -94,7 +94,7 @@ export const ContactSection = () => {
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                 className="w-full bg-zinc-950/50 border border-zinc-800 focus:border-yellow-400/50 rounded-full px-6 py-4 text-white placeholder-zinc-600 outline-none transition-colors shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]"
-                placeholder="John Doe"
+                placeholder="Masoom Mulla"
               />
             </div>
 
@@ -109,7 +109,7 @@ export const ContactSection = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                 className="w-full bg-zinc-950/50 border border-zinc-800 focus:border-yellow-400/50 rounded-full px-6 py-4 text-white placeholder-zinc-600 outline-none transition-colors shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]"
-                placeholder="john@example.com"
+                placeholder="masoommulla14@gmail.com"
               />
             </div>
 
