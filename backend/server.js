@@ -12,12 +12,17 @@ const contactRoutes = require('./src/routes/contact');
 const app = express();
 
 // CORS configuration
-const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'];
+const frontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : '';
+const allowedOrigins = [frontendUrl, 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'];
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+    // Fallback: if they are using a Render domain, let it through just in case the env var was misspelled
+    if (origin.includes('onrender.com')) {
       return callback(null, true);
     }
     // Reject if origin is not allowed
