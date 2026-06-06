@@ -36,7 +36,7 @@ export const HeroManager = ({ content, onUpdate }: { content: any, onUpdate: () 
       <h2 className="text-3xl font-bold mb-6 text-yellow-400">Hero Section</h2>
       <p className="text-zinc-400 mb-8">Manage the rotating text words in the top hero section. You must have at least one word.</p>
 
-      <div className="flex gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <input 
           type="text" 
           value={newWord} 
@@ -45,7 +45,7 @@ export const HeroManager = ({ content, onUpdate }: { content: any, onUpdate: () 
           className="flex-1 bg-zinc-950 border border-zinc-700 rounded-full px-6 py-3 outline-none focus:border-yellow-400"
           onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
         />
-        <button onClick={handleAdd} className="bg-yellow-400 text-black px-8 rounded-full font-bold uppercase tracking-widest hover:bg-yellow-300">Add</button>
+        <button onClick={handleAdd} className="bg-yellow-400 text-black px-8 py-3 rounded-full font-bold uppercase tracking-widest hover:bg-yellow-300 whitespace-nowrap">Add</button>
       </div>
 
       <div className="flex flex-wrap gap-4 mb-8">

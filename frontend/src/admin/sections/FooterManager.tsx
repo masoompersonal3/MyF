@@ -43,27 +43,30 @@ export const FooterManager = ({ content, onUpdate }: { content: any, onUpdate: (
 
       <div className="flex flex-col gap-6 mb-8">
         {platforms.map(p => (
-          <div key={p.id} className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 flex items-center gap-6">
-            <div className="text-3xl">{p.icon}</div>
-            <div className="flex-1">
+          <div key={p.id} className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-2xl">{p.icon}</span>
+              <span className="font-bold text-white">{p.label}</span>
+              <div className="ml-auto flex items-center gap-3">
+                <span className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Visible</span>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={links[p.id]?.visible || false} 
+                    onChange={e => handleUpdateLink(p.id, 'visible', e.target.checked)} 
+                    className="sr-only peer" 
+                  />
+                  <div className="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-400"></div>
+                </label>
+              </div>
+            </div>
+            <div>
               <label className="text-xs text-zinc-500 font-bold uppercase tracking-widest mb-2 block">{p.label} URL</label>
               <input 
                 value={links[p.id]?.url || ''} 
                 onChange={e => handleUpdateLink(p.id, 'url', e.target.value)} 
                 className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 outline-none focus:border-yellow-400 text-sm"
               />
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Visible</span>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={links[p.id]?.visible || false} 
-                  onChange={e => handleUpdateLink(p.id, 'visible', e.target.checked)} 
-                  className="sr-only peer" 
-                />
-                <div className="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-400"></div>
-              </label>
             </div>
           </div>
         ))}

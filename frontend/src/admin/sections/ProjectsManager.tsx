@@ -108,11 +108,11 @@ export const ProjectsManager = ({ content, onUpdate }: { content: any, onUpdate:
 
       {/* Projects List / Form */}
       <div className="bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-yellow-400">Projects</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-yellow-400">Projects</h2>
           <button 
             onClick={() => { setEditingId(null); setFormData({ title: '', description: '', tech: '', link: '', github: '', visible: true, order: 0 }); setShowForm(!showForm); }}
-            className="bg-yellow-400 text-black px-6 py-2 rounded-full font-bold hover:bg-yellow-300"
+            className="bg-yellow-400 text-black px-6 py-2 rounded-full font-bold hover:bg-yellow-300 whitespace-nowrap w-full sm:w-auto"
           >
             {showForm ? 'Cancel' : '+ Add Project'}
           </button>
@@ -123,7 +123,7 @@ export const ProjectsManager = ({ content, onUpdate }: { content: any, onUpdate:
             <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="Title" className="bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3" />
             <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Description" className="bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 h-32" />
             <input value={formData.tech} onChange={e => setFormData({...formData, tech: e.target.value})} placeholder="Tech stack (comma separated)" className="bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3" />
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <input value={formData.link} onChange={e => setFormData({...formData, link: e.target.value})} placeholder="Live Demo Link" className="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3" />
               <input value={formData.github} onChange={e => setFormData({...formData, github: e.target.value})} placeholder="GitHub Link" className="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3" />
             </div>
