@@ -29,8 +29,9 @@ export const MinimalistHero = ({
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-xl font-bold tracking-wider text-foreground"
+          className="text-xl font-bold tracking-wider text-foreground flex items-center gap-3"
         >
+          <img src="/p.jpeg" alt="Logo" className="w-10 h-10 rounded-full object-cover border border-zinc-800" />
           {logoText}
         </motion.div>
         <div className="hidden items-center space-x-8 md:flex">
