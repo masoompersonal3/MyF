@@ -36,10 +36,13 @@ export const MinimalistHero = ({
         </motion.div>
         <div className="hidden items-center space-x-8 md:flex">
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href}>
-              <StardustButton className="uppercase">
-                {link.label}
-              </StardustButton>
+            <a 
+              key={link.label} 
+              href={link.href}
+              className="text-sm font-bold tracking-[0.2em] text-zinc-400 hover:text-yellow-400 transition-colors uppercase relative group"
+            >
+              {link.label}
+              <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
         </div>
