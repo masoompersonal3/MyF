@@ -298,7 +298,7 @@ export function CinematicFooter() {
               {/* Social Links (Primary) */}
               <div className="flex flex-wrap justify-center md:justify-end gap-4 w-full">
                 {footerLinks?.linkedin?.visible !== false && (
-                  <MagneticButton as="a" href={footerLinks?.linkedin?.url || "https://linkedin.com"} target="_blank" rel="noopener noreferrer" style={{ boxShadow: GLASS_SHADOW }} className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800 px-8 py-4 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group hover:text-yellow-400 hover:border-yellow-400/50 transition-all">
+                  <MagneticButton as="a" href={footerLinks?.linkedin?.url || "https://www.linkedin.com/in/masoom-mulla-5a85062a4/"} target="_blank" rel="noopener noreferrer" style={{ boxShadow: GLASS_SHADOW }} className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800 px-8 py-4 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group hover:text-yellow-400 hover:border-yellow-400/50 transition-all">
                     <FaLinkedin className="w-6 h-6 transition-colors" />
                     LinkedIn
                   </MagneticButton>
