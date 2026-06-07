@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 export const SecurityShield: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     // Override console methods to prevent data leakage or debugging
-    if (process.env.NODE_ENV === 'production' || import.meta.env.PROD) {
+    if (import.meta.env.PROD) {
       console.log = () => {};
       console.warn = () => {};
       console.error = () => {};
