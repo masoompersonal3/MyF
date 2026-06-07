@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Send, User, Mail, MessageSquare } from 'lucide-react';
 import { StardustButton } from './ui/stardust-button';
 import { SITE_CONTENT } from '../data';
@@ -41,13 +40,7 @@ export const ContactSection = () => {
       <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
         
         {/* Left Side: Header & Info */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col"
-        >
+        <div className="flex flex-col">
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-display font-black tracking-tighter text-white mb-6 leading-[0.9]">
             {content?.contactHeading || "Let's"} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
@@ -69,16 +62,10 @@ export const ContactSection = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Right Side: The Glassmorphic Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full"
-        >
+        <div className="w-full">
           <form 
             onSubmit={handleSubmit}
             style={{
@@ -144,7 +131,7 @@ export const ContactSection = () => {
               </button>
             </div>
           </form>
-        </motion.div>
+        </div>
 
       </div>
     </section>
