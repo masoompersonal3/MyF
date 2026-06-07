@@ -40,8 +40,8 @@ export function ExperienceTimeline() {
           return (
             <motion.div
               key={item._id}
-              initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, delay: index * 0.1 }}
               className={`relative w-full flex flex-col md:flex-row justify-between items-center mb-16 ${isLeft ? "md:flex-row-reverse" : ""}`}
