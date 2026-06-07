@@ -34,9 +34,6 @@ export const ContactSection = () => {
 
   return (
     <section className="relative w-full bg-transparent text-white pt-32 pb-12 px-6 md:px-12 lg:px-24 overflow-hidden flex items-center justify-center">
-      {/* Background Ambience */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-yellow-500/5 rounded-full blur-[150px] pointer-events-none" />
-
       <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
         
         {/* Left Side: Header & Info */}
@@ -73,9 +70,6 @@ export const ContactSection = () => {
             }}
             className="w-full bg-zinc-900/30 backdrop-blur-xl p-8 md:p-12 rounded-[2rem] border border-zinc-800 flex flex-col gap-6 relative overflow-hidden group"
           >
-            {/* Ambient form glow */}
-            <div className="absolute -top-32 -right-32 w-64 h-64 bg-yellow-500/10 rounded-full blur-[80px] pointer-events-none group-hover:bg-yellow-500/20 transition-all duration-1000" />
-
             <div className="relative z-10 flex flex-col gap-2">
               <label htmlFor="name" className="text-xs text-zinc-400 font-bold uppercase tracking-widest ml-4 flex items-center gap-2">
                 <User size={14} className="text-yellow-400" /> Your Name
