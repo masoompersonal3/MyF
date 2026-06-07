@@ -72,8 +72,8 @@ const STYLES = `
   transform: scaleY(1.2); /* scaleY makes it taller! */
   transform-origin: bottom center;
   color: transparent;
-  -webkit-text-stroke: 3px rgba(255, 255, 255, 0.15);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+  -webkit-text-stroke: 4px rgba(255, 255, 255, 0.25);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -269,7 +269,7 @@ export function CinematicFooter() {
           {/* Giant background text */}
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute bottom-8 md:-bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none"
+            className="footer-giant-bg-text absolute bottom-24 md:-bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none"
           >
             MASOOM
           </div>
@@ -322,7 +322,7 @@ export function CinematicFooter() {
           </div>
 
           {/* 3. Bottom Bar / Credits */}
-          <div className="relative z-20 w-full pb-24 md:pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="relative z-20 w-full pb-40 md:pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
             
             {/* Left Group: Copyright + Badge */}
             <div className="flex flex-col md:flex-row items-center gap-6 order-2 md:order-1">

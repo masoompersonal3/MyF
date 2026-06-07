@@ -16,16 +16,16 @@ import {
 } from 'react-icons/si';
 
 export const techLogos = [
-  { node: <SiReact size={60} />, title: "React", href: "https://react.dev" },
-  { node: <SiNextdotjs size={60} />, title: "Next.js", href: "https://nextjs.org" },
-  { node: <SiTypescript size={60} />, title: "TypeScript", href: "https://www.typescriptlang.org" },
-  { node: <SiTailwindcss size={60} />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
-  { node: <SiMongodb size={60} />, title: "MongoDB", href: "https://www.mongodb.com" },
-  { node: <SiExpress size={60} />, title: "Express.js", href: "https://expressjs.com" },
-  { node: <SiNodedotjs size={60} />, title: "Node.js", href: "https://nodejs.org" },
-  { node: <SiFramer size={60} />, title: "Framer Motion", href: "https://www.framer.com/motion/" },
-  { node: <SiGit size={60} />, title: "Git", href: "https://git-scm.com" },
-  { node: <SiVite size={60} />, title: "Vite", href: "https://vitejs.dev" },
+  { node: <SiReact className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "React", href: "https://react.dev" },
+  { node: <SiNextdotjs className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "Next.js", href: "https://nextjs.org" },
+  { node: <SiTypescript className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "TypeScript", href: "https://www.typescriptlang.org" },
+  { node: <SiTailwindcss className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiMongodb className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "MongoDB", href: "https://www.mongodb.com" },
+  { node: <SiExpress className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "Express.js", href: "https://expressjs.com" },
+  { node: <SiNodedotjs className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "Node.js", href: "https://nodejs.org" },
+  { node: <SiFramer className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "Framer Motion", href: "https://www.framer.com/motion/" },
+  { node: <SiGit className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "Git", href: "https://git-scm.com" },
+  { node: <SiVite className="w-16 h-16 md:w-[60px] md:h-[60px]" />, title: "Vite", href: "https://vitejs.dev" },
 ];
 
 export const ToolsSection = () => {
@@ -61,7 +61,26 @@ export const ToolsSection = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[50%] w-[120vw] h-[92vw] bg-[#0a0a0a] rounded-[50%] shadow-[0_10px_50px_rgba(250,204,21,0.05)] border-b border-yellow-400/20" />
          
         {/* Logo Loop kept fixed relative to the heading, while the curve drops 6vw lower */}
-        <div className="absolute bottom-[80px] md:bottom-[calc(6vw+13px)] left-0 w-full z-40">
+        <div className="absolute bottom-[40px] md:bottom-[calc(6vw+13px)] left-0 w-full z-40 flex flex-col gap-6 md:gap-8">
+          <div 
+            className="max-w-5xl mx-auto w-full" 
+            style={{ 
+              maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+            }}
+          >
+            <LogoLoop
+              logos={techLogos}
+              speed={60}
+              direction="right"
+              logoHeight={80}
+              gap={80}
+              hoverSpeed={0}
+              scaleOnHover
+              fadeOut={false}
+              ariaLabel="Technology stack layer 1"
+            />
+          </div>
           <div 
             className="max-w-5xl mx-auto w-full" 
             style={{ 
@@ -73,12 +92,12 @@ export const ToolsSection = () => {
               logos={techLogos}
               speed={60}
               direction="left"
-              logoHeight={60}
+              logoHeight={80}
               gap={80}
               hoverSpeed={0}
               scaleOnHover
               fadeOut={false}
-              ariaLabel="Technology stack"
+              ariaLabel="Technology stack layer 2"
             />
           </div>
         </div>
