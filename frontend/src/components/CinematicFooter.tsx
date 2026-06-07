@@ -305,7 +305,7 @@ export function CinematicFooter() {
                 )}
 
                 {footerLinks?.github?.visible !== false && (
-                  <MagneticButton as="a" href={footerLinks?.github?.url || "https://github.com"} target="_blank" rel="noopener noreferrer" style={{ boxShadow: GLASS_SHADOW }} className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800 px-8 py-4 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group hover:text-yellow-400 hover:border-yellow-400/50 transition-all">
+                  <MagneticButton as="a" href={footerLinks?.github?.url || "https://github.com/masoommulla"} target="_blank" rel="noopener noreferrer" style={{ boxShadow: GLASS_SHADOW }} className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800 px-8 py-4 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group hover:text-yellow-400 hover:border-yellow-400/50 transition-all">
                     <SiGithub className="w-6 h-6 transition-colors" />
                     GitHub
                   </MagneticButton>
