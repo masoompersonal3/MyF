@@ -75,7 +75,7 @@ const App = () => {
           />
           
           {/* Scroll Animation Section positioned just below the hero title */}
-          <div id="work" className="relative w-full z-20 -mt-32 md:-mt-40">
+          <div id="work" className="relative w-full z-20 -mt-32 md:-mt-52">
             <ContainerScroll titleComponent={null}>
               <div className="flex flex-col h-full p-6 md:p-12 lg:p-16 bg-transparent">
                 {content?.aboutContent && (
