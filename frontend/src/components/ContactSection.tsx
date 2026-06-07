@@ -12,11 +12,14 @@ export const ContactSection = () => {
     e.preventDefault();
     setStatus('sending');
     try {
-      // Using Formspree — replace YOUR_FORM_ID with your actual Formspree endpoint
-      const res = await fetch('https://formspree.io/f/xpwzgvgd', {
+      // Using Web3Forms with environment variable
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+          ...formData
+        }),
       });
       if (res.ok) {
         setStatus('success');
