@@ -58,7 +58,7 @@ export const EDUCATION = [
   {
     _id: '1',
     degree: 'SSLC',
-    institution: 'Volkart High School',
+    institution: 'Volart Academy High School',
     year: '2019 - 2020',
     percentage: '80.16%',
     status: 'Completed',
@@ -78,7 +78,7 @@ export const EDUCATION = [
   {
     _id: '3',
     degree: 'B.E. Computer Science',
-    institution: 'KLE Dr. M.S. Sheshgiri College of Engineering',
+    institution: 'KLECET Chikodi',
     year: '2023 - 2027',
     percentage: 'CGPA 8.4',
     status: 'In Progress',
