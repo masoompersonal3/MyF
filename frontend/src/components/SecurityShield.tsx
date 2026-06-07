@@ -9,13 +9,19 @@ export const SecurityShield: React.FC<{ children: React.ReactNode }> = ({ childr
     // We measure the time it takes to execute a tiny block of code.
     // If it takes significantly longer than usual, it means the debugger paused it!
     const detectDevTools = () => {
+      // 1. Timing detection (Catch if breakpoints are active)
       const start = performance.now();
       // eslint-disable-next-line no-debugger
       debugger; 
       const timeTaken = performance.now() - start;
       
-      // If it takes more than 100ms, the debugger definitely caught it
-      if (timeTaken > 100) {
+      // 2. Dimension detection (Catch if DevTools is docked and breakpoints are deactivated)
+      const threshold = 160;
+      const widthDiff = window.outerWidth - window.innerWidth > threshold;
+      const heightDiff = window.outerHeight - window.innerHeight > threshold;
+      
+      // If timing is slow OR window dimensions show a docked panel, block it
+      if (timeTaken > 100 || widthDiff || heightDiff) {
         setIsDevToolsOpen(true);
       } else {
         setIsDevToolsOpen(false);
