@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../lib/utils';
 import React, { useState } from 'react';
-import { StardustButton } from './stardust-button';
 
 interface MinimalistHeroProps {
   logoText: string;
@@ -95,11 +94,11 @@ export const MinimalistHero = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="z-20 flex flex-col items-center justify-center text-center mt-0 md:-mt-8"
+          className="z-20 flex flex-col items-center justify-center text-center mt-0 md:mt-12"
         >
           <h1 className="hero-font text-5xl md:text-7xl lg:text-[9rem] text-foreground flex flex-col md:flex-row items-center justify-center md:gap-6 leading-none">
             <span>{overlayText.part1}</span>
-            <span className="text-yellow-400 min-w-[320px] md:min-w-[600px] flex justify-center md:justify-start">
+            <span className="text-yellow-400 min-w-[320px] md:min-w-[600px] flex justify-center md:justify-center">
               {overlayText.part2}
             </span>
           </h1>
