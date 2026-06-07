@@ -12,6 +12,7 @@ import { CinematicFooter } from './components/CinematicFooter';
 import { LoadingScreen } from './components/LoadingScreen';
 import { MobilePopup } from './components/MobilePopup';
 import { SITE_CONTENT } from './data';
+import { SecurityShield } from './components/SecurityShield';
 
 const App = () => {
   const [loaded, setLoaded] = useState(false);
@@ -34,7 +35,8 @@ const App = () => {
 
       {/* Main site - render always but hidden until loaded */}
       <div className={`flex flex-col bg-background w-full min-h-screen relative overflow-hidden transition-opacity duration-700 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
-        {/* Fixed Starry Background Effect for the entire site */}
+        <SecurityShield>
+          {/* Fixed Starry Background Effect for the entire site */}
         <div className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none">
           <CosmicParallaxBg head="" text="" hideEarth={true} />
         </div>
@@ -122,6 +124,7 @@ const App = () => {
         </div>
 
         <CinematicFooter />
+        </SecurityShield>
       </div>
     </>
   );
