@@ -72,8 +72,8 @@ const STYLES = `
   transform: scaleY(1.2); /* scaleY makes it taller! */
   transform-origin: bottom center;
   color: transparent;
-  -webkit-text-stroke: 4px rgba(255, 255, 255, 0.25);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+  -webkit-text-stroke: 6px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 60%);
   -webkit-background-clip: text;
   background-clip: text;
 }

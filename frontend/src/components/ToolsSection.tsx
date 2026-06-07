@@ -63,7 +63,7 @@ export const ToolsSection = () => {
         {/* Logo Loop kept fixed relative to the heading, while the curve drops 6vw lower */}
         <div className="absolute bottom-[40px] md:bottom-[calc(6vw+13px)] left-0 w-full z-40 flex flex-col gap-6 md:gap-8">
           <div 
-            className="max-w-5xl mx-auto w-full" 
+            className="block md:hidden max-w-5xl mx-auto w-full" 
             style={{ 
               maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
               WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
