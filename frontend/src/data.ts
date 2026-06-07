@@ -46,7 +46,7 @@ export const PROJECTS = [
     title: 'ZenMind Major',
     description: 'The full-scale version of ZenMind with advanced features including real-time community forums, therapist booking system, progress analytics dashboard, and a subscription-based premium tier.',
     tech: ['MERN Stack', 'Socket.io', 'Stripe', 'Redis', 'Framer Motion'],
-    link: '',
+    link: 'https://zenmind-india.onrender.com/',
     github: '',
     imageUrl: '/projects/major.png',
     visible: true,
