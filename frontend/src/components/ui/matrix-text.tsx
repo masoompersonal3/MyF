@@ -111,16 +111,16 @@ export const MatrixText = ({
     return (
         <div
             className={cn(
-                "flex items-center justify-start text-foreground/80",
+                "flex items-center justify-center text-white",
                 className
             )}
             aria-label="Matrix text animation"
         >
-            <div className="flex flex-wrap items-center justify-start">
+            <div className="flex flex-wrap items-center justify-center">
                 {letters.map((letter, index) => (
-                    <motion.div
+                    <motion.span
                         key={`${index}-${letter.char}`}
-                        className="font-mono text-sm md:text-base w-[1ch] text-center overflow-hidden"
+                        className="font-black text-center overflow-visible inline-block"
                         initial="initial"
                         animate={letter.isMatrix ? "matrix" : "normal"}
                         variants={motionVariants}
@@ -129,12 +129,11 @@ export const MatrixText = ({
                             ease: "easeInOut",
                         }}
                         style={{
-                            display: "inline-block",
                             fontVariantNumeric: "tabular-nums",
                         }}
                     >
                         {letter.isSpace ? "\u00A0" : letter.char}
-                    </motion.div>
+                    </motion.span>
                 ))}
             </div>
         </div>

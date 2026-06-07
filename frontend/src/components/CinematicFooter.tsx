@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "../lib/utils";
 import { SiGithub } from 'react-icons/si';
 import { FaLinkedin, FaInstagram } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { apiClient } from '../api';
+import { SITE_CONTENT } from '../data';
 
 // Register ScrollTrigger safely for React
 if (typeof window !== "undefined") {
@@ -41,6 +40,15 @@ const STYLES = `
   animation: footer-scroll-marquee 40s linear infinite;
 }
 
+@keyframes footer-giant-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-footer-giant-marquee {
+  animation: footer-giant-marquee 25s linear infinite;
+}
+
 .animate-footer-heartbeat {
   animation: footer-heartbeat 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
@@ -57,17 +65,27 @@ const STYLES = `
 
 /* Giant Background Text Masking */
 .footer-giant-bg-text {
-  font-size: clamp(6rem, 24vw, 22rem);
+  font-size: clamp(4rem, 15vw, 22rem);
   line-height: 0.75;
   font-weight: 900;
   letter-spacing: -0.06em;
   transform: scaleY(1.2); /* scaleY makes it taller! */
   transform-origin: bottom center;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+  -webkit-text-stroke: 3px rgba(255, 255, 255, 0.15);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+@media (min-width: 768px) {
+  .footer-giant-bg-text {
+    font-size: clamp(6rem, 24vw, 22rem);
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
 }
 
 /* Metallic Text Glow */
@@ -173,15 +191,15 @@ const MarqueeItem = () => (
 const GLASS_SHADOW = "inset 0 0 20px rgba(255, 255, 255, 0.192), inset 0 0 5px rgba(255, 255, 255, 0.274), 0 5px 5px rgba(0, 0, 0, 0.164)";
 
 export function CinematicFooter() {
-  const navigate = useNavigate();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const giantTextRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
-  const [content, setContent] = useState<any>(null);
 
-  useEffect(() => {
-    apiClient.getContent().then(setContent).catch(console.error);
-  }, []);
+  const footerLinks = SITE_CONTENT.footerLinks;
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -226,11 +244,6 @@ export function CinematicFooter() {
     return () => ctx.revert();
   },[]);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const footerLinks = content?.footerLinks || {};
 
   return (
     <>
@@ -256,7 +269,7 @@ export function CinematicFooter() {
           {/* Giant background text */}
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none"
+            className="footer-giant-bg-text absolute bottom-8 md:-bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none"
           >
             MASOOM
           </div>
@@ -270,12 +283,20 @@ export function CinematicFooter() {
           </div>
 
           {/* 2. Main Center Content */}
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-20 md:mt-32 w-full max-w-5xl mx-auto">
+          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-20 md:mt-10 w-full max-w-5xl mx-auto">
             {/* Interactive Magnetic Pills Layout */}
-            <div ref={linksRef} className="flex flex-col items-center gap-6 w-full">
+            <div ref={linksRef} className="flex flex-col items-center gap-6 w-full relative">
               
+              {/* Desktop Only: "Made with Love" Badge */}
+              <div className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 bg-zinc-900/40 backdrop-blur-md px-6 py-3 rounded-full items-center gap-2 border border-zinc-800" style={{ boxShadow: GLASS_SHADOW }}>
+                <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
+                <span className="animate-footer-heartbeat text-sm md:text-base text-yellow-400">❤</span>
+                <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
+                <span className="text-foreground font-black text-xs md:text-sm tracking-normal ml-1">Masoom</span>
+              </div>
+
               {/* Social Links (Primary) */}
-              <div className="flex flex-wrap justify-center gap-4 w-full">
+              <div className="flex flex-wrap justify-center md:justify-end gap-4 w-full">
                 {footerLinks?.linkedin?.visible !== false && (
                   <MagneticButton as="a" href={footerLinks?.linkedin?.url || "https://linkedin.com"} target="_blank" rel="noopener noreferrer" style={{ boxShadow: GLASS_SHADOW }} className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800 px-8 py-4 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group hover:text-yellow-400 hover:border-yellow-400/50 transition-all">
                     <FaLinkedin className="w-6 h-6 transition-colors" />
@@ -301,19 +322,22 @@ export function CinematicFooter() {
           </div>
 
           {/* 3. Bottom Bar / Credits */}
-          <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="relative z-20 w-full pb-24 md:pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
             
-            {/* Copyright */}
-            <div className="text-muted-foreground text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1">
-              © 2026 Masoom. All rights reserved.
-            </div>
+            {/* Left Group: Copyright + Badge */}
+            <div className="flex flex-col md:flex-row items-center gap-6 order-2 md:order-1">
+              {/* Copyright */}
+              <div className="text-muted-foreground text-[10px] md:text-xs font-semibold tracking-widest uppercase">
+                © 2026 Masoom. All rights reserved.
+              </div>
 
-            {/* "Made with Love" Badge */}
-            <div onDoubleClick={() => navigate('/admin')} className="bg-zinc-900/40 backdrop-blur-md px-6 py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-pointer border border-zinc-800" style={{ boxShadow: GLASS_SHADOW }}>
-              <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
-              <span className="animate-footer-heartbeat text-sm md:text-base text-yellow-400">❤</span>
-              <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
-              <span className="text-foreground font-black text-xs md:text-sm tracking-normal ml-1">Masoom</span>
+              {/* "Made with Love" Badge */}
+              <div className="flex md:hidden bg-zinc-900/40 backdrop-blur-md px-6 py-3 rounded-full items-center gap-2 border border-zinc-800" style={{ boxShadow: GLASS_SHADOW }}>
+                <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
+                <span className="animate-footer-heartbeat text-sm md:text-base text-yellow-400">❤</span>
+                <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
+                <span className="text-foreground font-black text-xs md:text-sm tracking-normal ml-1">Masoom</span>
+              </div>
             </div>
 
             {/* Back to top */}

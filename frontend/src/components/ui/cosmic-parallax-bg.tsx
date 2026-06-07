@@ -23,6 +23,11 @@ interface CosmicParallaxBgProps {
    * Custom class name for additional styling
    */
   className?: string;
+
+  /**
+   * Hide the Earth semi-circle
+   */
+  hideEarth?: boolean;
 }
 
 /**
@@ -33,6 +38,7 @@ const CosmicParallaxBg: React.FC<CosmicParallaxBgProps> = ({
   text,
   loop = true,
   className = '',
+  hideEarth = false,
 }) => {
   const [smallStars, setSmallStars] = useState<string>('');
   const [mediumStars, setMediumStars] = useState<string>('');
@@ -87,10 +93,14 @@ const CosmicParallaxBg: React.FC<CosmicParallaxBgProps> = ({
       ></div>
       
       {/* Horizon and Earth */}
-      <div id="horizon">
-        <div className="glow"></div>
-      </div>
-      <div id="earth"></div>
+      {!hideEarth && (
+        <>
+          <div id="horizon">
+            <div className="glow"></div>
+          </div>
+          <div id="earth"></div>
+        </>
+      )}
       
       {/* Title and subtitle */}
       {head && <div id="title">{head.toUpperCase()}</div>}

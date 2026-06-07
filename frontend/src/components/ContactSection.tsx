@@ -1,26 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, User, Mail, MessageSquare } from 'lucide-react';
 import { StardustButton } from './ui/stardust-button';
-import { apiClient } from '../api';
+import { SITE_CONTENT } from '../data';
 
 export const ContactSection = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [content, setContent] = useState<any>(null);
+  const content = SITE_CONTENT;
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
-
-  useEffect(() => {
-    apiClient.getContent().then(setContent).catch(console.error);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
     try {
-      await apiClient.submitContact(formData);
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setStatus('idle'), 3000);
+      // Using Formspree — replace YOUR_FORM_ID with your actual Formspree endpoint
+      const res = await fetch('https://formspree.io/f/xpwzgvgd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setStatus('idle'), 3000);
+      } else {
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 3000);
+      }
     } catch {
       setStatus('error');
       setTimeout(() => setStatus('idle'), 3000);
@@ -28,7 +34,7 @@ export const ContactSection = () => {
   };
 
   return (
-    <section className="relative w-full bg-[#0a0a0a] text-white py-12 px-6 md:px-12 lg:px-24 overflow-hidden border-t border-zinc-900/50 flex items-center justify-center">
+    <section className="relative w-full bg-transparent text-white pt-32 pb-12 px-6 md:px-12 lg:px-24 overflow-hidden flex items-center justify-center">
       {/* Background Ambience */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-yellow-500/5 rounded-full blur-[150px] pointer-events-none" />
 

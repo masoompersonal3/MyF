@@ -15,7 +15,7 @@ import {
   SiVite
 } from 'react-icons/si';
 
-const techLogos = [
+export const techLogos = [
   { node: <SiReact size={60} />, title: "React", href: "https://react.dev" },
   { node: <SiNextdotjs size={60} />, title: "Next.js", href: "https://nextjs.org" },
   { node: <SiTypescript size={60} />, title: "TypeScript", href: "https://www.typescriptlang.org" },
@@ -30,12 +30,15 @@ const techLogos = [
 
 export const ToolsSection = () => {
   return (
-    <section className="relative w-full bg-[#0a0a0a] text-white py-12 overflow-hidden border-t border-zinc-900/50">
-      
+    <section className="relative w-full bg-transparent text-white pt-12 pb-0 flex flex-col items-center">
+      {/* Top solid black block stretching from the top of the section to exactly above the 46vw container */}
+      <div className="absolute top-0 left-0 w-full bg-[#0a0a0a] z-0" style={{ bottom: '46vw' }} />
+
       {/* Background Ambience */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[20rem] bg-zinc-800/20 rounded-[100%] blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center justify-center mb-16">
+      {/* Heading - Make sure it's z-40 so it stays above the semi-circle if they overlap */}
+      <div className="relative z-40 max-w-7xl mx-auto flex flex-col items-center justify-center mb-0">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -52,24 +55,32 @@ export const ToolsSection = () => {
         </motion.div>
       </div>
 
-      <div className="relative z-10 w-full overflow-hidden">
-        {/* Left/Right Fade Masks */}
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-
-        {/* Logo Loop - Moving Left */}
-        <div className="py-8 border-y border-zinc-900/50 bg-zinc-900/10">
-          <LogoLoop
-            logos={techLogos}
-            speed={60}
-            direction="left"
-            logoHeight={60}
-            gap={80}
-            hoverSpeed={0}
-            scaleOnHover
-            fadeOut={false} // Managed by our absolute gradients instead to perfectly match #0a0a0a
-            ariaLabel="Technology stack"
-          />
+      {/* The massive downward semi-circle with LogoLoop sitting at its bottom */}
+      <div className="relative z-30 w-full overflow-hidden h-[46vw] bg-transparent mt-4 sm:-mt-[15vw] md:-mt-[30vw] lg:-mt-[32vw]">
+        {/* The Black Circle extending from ToolsSection */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[50%] w-[120vw] h-[92vw] bg-[#0a0a0a] rounded-[50%] shadow-[0_10px_50px_rgba(250,204,21,0.05)] border-b border-yellow-400/20" />
+         
+        {/* Logo Loop kept fixed relative to the heading, while the curve drops 6vw lower */}
+        <div className="absolute bottom-[80px] md:bottom-[calc(6vw+13px)] left-0 w-full z-40">
+          <div 
+            className="max-w-5xl mx-auto w-full" 
+            style={{ 
+              maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+            }}
+          >
+            <LogoLoop
+              logos={techLogos}
+              speed={60}
+              direction="left"
+              logoHeight={60}
+              gap={80}
+              hoverSpeed={0}
+              scaleOnHover
+              fadeOut={false}
+              ariaLabel="Technology stack"
+            />
+          </div>
         </div>
       </div>
     </section>

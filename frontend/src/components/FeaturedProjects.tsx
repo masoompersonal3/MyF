@@ -1,260 +1,295 @@
 // @ts-nocheck
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { StardustButton } from './ui/stardust-button';
-import { apiClient } from '../api';
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { FiArrowUpRight } from "react-icons/fi";
+import { MatrixText } from "./ui/matrix-text";
+import { StardustButton } from "./ui/stardust-button";
+import { PROJECTS, SITE_CONTENT } from '../data';
 
-export function FeaturedProjects() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [projects, setProjects] = useState<any[]>([]);
-  const [content, setContent] = useState<any>(null);
+const IMG_PADDING = 12;
 
-  useEffect(() => {
-    Promise.all([
-      apiClient.getProjects(),
-      apiClient.getContent()
-    ]).then(([projData, contentData]) => {
-      setProjects(projData);
-      setContent(contentData);
-    }).catch(console.error);
-  }, []);
+// ─── Image — starts small, expands to 85%, then shrinks on scroll ────────────────
+const AnimatedImage = ({ imgUrl, title }: { imgUrl: string; title: string }) => {
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start end", "end start"],
+  });
+  
+  // 0 = bottom of screen (entering), 0.5 = middle, 1 = top of screen (leaving)
+  // Scale starts at 0.70 (70%), grows to 0.95 (95%) in center, stays a bit, then shrinks back to 0.70
+  const scale = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.7, 0.95, 0.95, 0.7]);
 
-  const handleNext = () => {
-    if (projects.length === 0) return;
-    setCurrentIndex((prev) => (prev + 1) % projects.length);
-  };
-
-  const handlePrev = () => {
-    if (projects.length === 0) return;
-    setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
-  };
-
-  if (projects.length === 0) {
-    return (
-      <section className="relative w-full bg-[#0a0a0a] text-white py-12 px-6 md:px-12 lg:px-24 overflow-hidden border-t border-zinc-900/50 min-h-screen flex flex-col justify-center">
-        <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center justify-center mb-12 lg:mb-20">
-          <h2 className="text-5xl md:text-7xl font-display font-light tracking-wide text-white">
-            {content?.featuredTitle || 'Featured Work'}
-          </h2>
-          <p className="mt-4 text-zinc-400 max-w-2xl mx-auto text-xl font-light tracking-wide">
-            {content?.featuredSubtitle || 'A selection of my recent full-stack applications and functional frontends.'}
-          </p>
-          <div className="mt-12 flex justify-center items-center h-64 w-full max-w-4xl bg-zinc-900/20 backdrop-blur-md rounded-[30px] border border-zinc-800">
-            <h3 className="text-2xl text-zinc-500 font-bold uppercase tracking-widest">Projects Coming Soon</h3>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  const currentProject = projects[currentIndex];
-
-  const getImageUrl = (p: any) => {
-    if (p.imageData) return `data:${p.imageMimeType};base64,${p.imageData}`;
-    return p.imageUrl || '';
-  };
   return (
-    <section className="relative w-full bg-[#0a0a0a] text-white py-12 px-6 md:px-12 lg:px-24 overflow-hidden border-t border-zinc-900/50 min-h-screen flex flex-col justify-center">
-      {/* Background Gradients */}
-      <div className="absolute top-1/4 left-0 w-[40rem] h-[40rem] bg-yellow-500/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-0 w-[40rem] h-[40rem] bg-yellow-500/5 rounded-full blur-[150px] pointer-events-none" />
-      
-      {/* Header (Pulled Higher) */}
-      <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center justify-center mb-12 lg:mb-20">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center"
-        >
-          <h2 className="text-5xl md:text-7xl font-display font-light tracking-wide text-white">
-            Featured <span className="font-bold text-yellow-400">Work</span>
-          </h2>
-          <p className="mt-4 text-zinc-400 max-w-2xl mx-auto text-xl font-light tracking-wide">
-            A selection of my recent full-stack applications and functional frontends.
-          </p>
-        </motion.div>
+    <div ref={targetRef} className="w-full flex justify-center py-2">
+      <motion.div
+        style={{
+          height: `100vh`, // Maximum screen height
+          width: '100%',
+          scale,
+          willChange: "transform" // Hardware acceleration hint
+        }}
+        className="relative z-0 overflow-hidden rounded-[2.5rem] border border-white/10 bg-zinc-900 shadow-[inset_0_0_20px_rgba(255,255,255,0.05),inset_0_0_5px_rgba(255,255,255,0.1),0_30px_60px_rgba(0,0,0,0.6)]"
+      >
+        {/* The clear project image */}
+        {imgUrl ? (
+          <img src={imgUrl} alt={title} className="w-full h-full object-cover" loading="lazy" />
+        ) : (
+          <div className="w-full h-full bg-zinc-900 flex flex-col items-center justify-center text-zinc-700">
+            <span className="text-8xl mb-6 opacity-30">🖼️</span>
+            <span className="text-xl font-bold tracking-widest uppercase opacity-30">No Image Yet</span>
+          </div>
+        )}
+        
+        {/* Liquid Glass Overlay Effects (Optimized for performance) */}
+        {/* 1. Subtle top-left glare without mix-blend-mode */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
+        {/* 2. Soft bottom shadow for depth */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+        {/* 3. Gold rim light */}
+        <div className="absolute inset-0 rounded-[2.5rem] border border-yellow-400/20 pointer-events-none shadow-[inset_0_0_30px_rgba(250,204,21,0.05)]" />
+      </motion.div>
+    </div>
+  );
+};
+
+// ─── MatrixText title with inView trigger ─────────────────────────────────────
+const ProjectTitle = ({ title, index }: { title: string; index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5 }}
+      className="text-center w-full"
+    >
+      {/* Project number */}
+      <p className="text-xs font-bold tracking-[0.5em] text-yellow-400 uppercase mb-3">
+        Project {String(index + 1).padStart(2, '0')}
+      </p>
+
+      {/* MatrixText for the title */}
+      {isInView && (
+        <div className="flex justify-center">
+          <MatrixText
+            text={title}
+            initialDelay={100}
+            letterAnimationDuration={400}
+            letterInterval={60}
+            className="justify-center text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-none"
+          />
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
+// ─── Project details — tight spacing below image ──────────────────────────────
+const ProjectDetails = ({ project }: { project: any }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-60px" }}
+    transition={{ duration: 0.6 }}
+    className="mx-auto max-w-5xl px-6 pt-16 md:pt-20 pb-12 grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-10"
+  >
+    {/* Left: tech tags */}
+    <div className="col-span-1 md:col-span-4 flex flex-col gap-3">
+      <p className="text-xs font-bold tracking-[0.4em] text-yellow-400 uppercase">Tech Stack</p>
+      <div className="flex flex-wrap gap-2">
+        {project?.tech?.map((t: string, i: number) => (
+          <span
+            key={i}
+            className="px-3 py-1.5 text-xs font-bold tracking-wider bg-zinc-900 text-yellow-400 rounded-full border border-yellow-400/20"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    {/* Right: description + button */}
+    <div className="col-span-1 md:col-span-8">
+      <p className="text-base md:text-lg text-zinc-400 leading-relaxed mb-6">
+        {project.description}
+      </p>
+      {project.link ? (
+        <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-block">
+          <StardustButton className="flex items-center gap-2 uppercase tracking-widest font-bold">
+            Live Demo <FiArrowUpRight className="text-lg" />
+          </StardustButton>
+        </a>
+      ) : (
+        <div className="inline-block opacity-60 cursor-not-allowed">
+          <StardustButton className="flex items-center gap-2 uppercase tracking-widest font-bold bg-zinc-800 text-zinc-400 border-zinc-700 hover:bg-zinc-800 hover:text-zinc-400 pointer-events-none">
+            Coming Soon <FiArrowUpRight className="text-lg" />
+          </StardustButton>
+        </div>
+      )}
+    </div>
+  </motion.div>
+);
+
+// ─── One full parallax project block ─────────────────────────────────────────
+const ParallaxProjectBlock = ({ project, index, isLast }: { project: any; index: number; isLast: boolean }) => {
+  const imgUrl = project.imageUrl || '';
+
+  return (
+    // Large top padding before each project to separate projects from each other
+    <div className={`pt-20 md:pt-28 ${!isLast ? 'mb-20 md:mb-32' : ''}`}>
+      {/* Centered Title ABOVE image */}
+      <div
+        style={{ paddingLeft: IMG_PADDING, paddingRight: IMG_PADDING }}
+        className="mb-6 md:mb-8"
+      >
+        <ProjectTitle title={project.title} index={index} />
       </div>
 
-      {/* Desktop: Auto-Playing Horizontal Carousel */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto hidden md:flex flex-col items-center justify-center min-h-[60vh]">
-        
-        {/* Left Navigation Button */}
-        <button 
-          onClick={handlePrev} 
-          className="absolute left-0 lg:-left-4 z-30 p-3 md:p-4 bg-zinc-900/80 border border-zinc-700 hover:bg-yellow-400 text-white hover:text-black rounded-full transition-all backdrop-blur-md shadow-2xl"
-          aria-label="Previous project"
-        >
-          <ChevronLeft size={32} />
-        </button>
+      {/* Image block — scales and expands/shrinks on scroll */}
+      <div style={{ paddingLeft: IMG_PADDING, paddingRight: IMG_PADDING }}>
+        <AnimatedImage imgUrl={imgUrl} title={project.title} />
+      </div>
 
-        {/* Right Navigation Button */}
-        <button 
-          onClick={handleNext} 
-          className="absolute right-0 lg:-right-4 z-30 p-3 md:p-4 bg-zinc-900/80 border border-zinc-700 hover:bg-yellow-400 text-white hover:text-black rounded-full transition-all backdrop-blur-md shadow-2xl"
-          aria-label="Next project"
-        >
-          <ChevronRight size={32} />
-        </button>
-
-        {/* Carousel Container */}
-        <div className="relative w-full h-full flex items-center justify-center overflow-hidden px-4 md:px-12 lg:px-20 py-8">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ x: "100%", opacity: 1, scale: 1 }}
-              animate={{ x: 0, opacity: 1, scale: 1 }}
-              exit={{ x: "-100%", opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              style={{
-                boxShadow: "inset 0 0 20px rgba(255, 255, 255, 0.192), inset 0 0 5px rgba(255, 255, 255, 0.274), 0 5px 5px rgba(0, 0, 0, 0.164)"
-              }}
-              className="w-full flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 bg-zinc-900/20 backdrop-blur-md rounded-[30px] p-6 md:p-12 lg:p-16 transition-all duration-500 hover:bg-[rgba(173,173,173,0.05)]"
-            >
-              {/* Project Details */}
-              <div className="flex-1 w-full max-w-xl">
-                  <h3 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4 leading-tight">
-                    {currentProject.title}
-                  </h3>
-                  <p className="text-zinc-300 text-base md:text-lg leading-relaxed mb-6 font-medium">
-                      {currentProject.description}
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {currentProject?.tech?.map((t: string, i: number) => (
-                      <span 
-                        key={i} 
-                        style={{ boxShadow: "inset 0 0 10px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.2)" }}
-                        className="px-3 py-1.5 text-xs font-semibold tracking-wide bg-zinc-800/40 text-yellow-400 rounded-full"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Buttons - stack on mobile, side by side on desktop */}
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                    <a href={currentProject.link} target="_blank" rel="noopener noreferrer" className="w-full sm:w-44">
-                      <StardustButton className="uppercase w-full">
-                        Live Demo
-                      </StardustButton>
-                    </a>
-                    <a 
-                      href={currentProject.github} 
-                      style={{ boxShadow: "inset 0 0 20px rgba(255, 255, 255, 0.192), inset 0 0 5px rgba(255, 255, 255, 0.274), 0 5px 5px rgba(0, 0, 0, 0.164)" }}
-                      className="w-full sm:w-44 flex items-center justify-center text-[14px] font-bold text-white bg-zinc-800/40 py-[12px] rounded-full hover:bg-zinc-700/60 transition-colors uppercase tracking-wider"
-                    >
-                      Source Code
-                    </a>
-                  </div>
-              </div>
-              
-              {/* Project Image - hidden on mobile */}
-              <div 
-                style={{ boxShadow: "inset 0 0 20px rgba(255, 255, 255, 0.192), inset 0 0 5px rgba(255, 255, 255, 0.274), 0 5px 5px rgba(0, 0, 0, 0.164)" }}
-                className="hidden lg:flex flex-1 w-full max-w-2xl aspect-[4/3] relative rounded-[2rem] overflow-hidden p-2 bg-zinc-900/20 items-center justify-center"
-              >
-                  {(currentProject.imageData || currentProject.imageUrl) ? (
-                    <img 
-                        src={getImageUrl(currentProject)} 
-                        className="w-full h-full object-cover rounded-[1.5rem] transform hover:scale-105 transition-transform duration-700" 
-                        alt={currentProject.title}
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-zinc-800/50 rounded-[1.5rem] flex flex-col items-center justify-center text-zinc-500 font-medium">
-                      <span className="text-4xl mb-2 opacity-50">🖼️</span>
-                      <span>No image provided</span>
-                    </div>
-                  )}
-                  {/* Ambient inner glow */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-yellow-500/10 to-transparent pointer-events-none rounded-[2rem]" />
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Carousel Navigation Dots */}
-        {projects.length > 1 && (
-          <div className="flex justify-center items-center gap-3 mt-8">
-            {projects.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? "bg-yellow-400 w-10" : "bg-zinc-700 hover:bg-zinc-500"
-                }`}
-              />
-            ))}
+      {/* Project details immediately below — tight gap */}
+      <div className="bg-[#0a0a0a]">
+        <ProjectDetails project={project} />
+        {/* Thin divider only between projects, not at end */}
+        {!isLast && (
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="border-t border-zinc-800/60" />
           </div>
         )}
       </div>
+    </div>
+  );
+};
 
-      {/* Mobile: Stacked List */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto flex md:hidden flex-col gap-12 px-2 py-4">
-        {projects.map((project, index) => (
-          <div
-            key={index}
-            style={{
-              boxShadow: "inset 0 0 20px rgba(255, 255, 255, 0.192), inset 0 0 5px rgba(255, 255, 255, 0.274), 0 5px 5px rgba(0, 0, 0, 0.164)"
-            }}
-            className="w-full flex flex-col items-center justify-center gap-8 bg-zinc-900/20 backdrop-blur-md rounded-[30px] p-6 transition-all duration-500"
-          >
-            {/* Project Image - visible on mobile now */}
-            {(project.imageData || project.imageUrl) && (
-              <div 
-                style={{ boxShadow: "inset 0 0 20px rgba(255, 255, 255, 0.192), inset 0 0 5px rgba(255, 255, 255, 0.274), 0 5px 5px rgba(0, 0, 0, 0.164)" }}
-                className="w-full aspect-[4/3] relative rounded-[2rem] overflow-hidden p-2 bg-zinc-900/20"
-              >
-                  <img 
-                      src={getImageUrl(project)} 
-                      className="w-full h-full object-cover rounded-[1.5rem]" 
-                      alt={project.title}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-yellow-500/10 to-transparent pointer-events-none rounded-[2rem]" />
-              </div>
-            )}
-            
-            {/* Project Details */}
-            <div className="w-full">
-                <h3 className="text-3xl font-display font-bold text-white mb-4 leading-tight">
-                  {project.title}
-                </h3>
-                <p className="text-zinc-300 text-base leading-relaxed mb-6 font-medium">
-                    {project.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {project?.tech?.map((t: string, i: number) => (
-                    <span 
-                      key={i} 
-                      style={{ boxShadow: "inset 0 0 10px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.2)" }}
-                      className="px-3 py-1.5 text-xs font-semibold tracking-wide bg-zinc-800/40 text-yellow-400 rounded-full"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
+// ─── Mobile card ──────────────────────────────────────────────────────────────
+const MobileProjectCard = ({ project, index }: { project: any; index: number }) => {
+  const imgUrl = project.imageUrl || '';
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="relative z-0 w-full flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-900 shadow-[inset_0_0_20px_rgba(255,255,255,0.05),inset_0_0_5px_rgba(255,255,255,0.1),0_20px_40px_rgba(0,0,0,0.4)]"
+    >
+      {/* Liquid Glass Overlay Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 rounded-[2rem] border border-yellow-400/20 pointer-events-none shadow-[inset_0_0_30px_rgba(250,204,21,0.05)]" />
 
-                <div className="flex flex-col gap-4">
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="w-full">
-                    <StardustButton className="uppercase w-full">
-                      Live Demo
-                    </StardustButton>
-                  </a>
-                  <a 
-                    href={project.github} 
-                    style={{ boxShadow: "inset 0 0 20px rgba(255, 255, 255, 0.192), inset 0 0 5px rgba(255, 255, 255, 0.274), 0 5px 5px rgba(0, 0, 0, 0.164)" }}
-                    className="w-full flex items-center justify-center text-[14px] font-bold text-white bg-zinc-800/40 py-[12px] rounded-full hover:bg-zinc-700/60 transition-colors uppercase tracking-wider"
-                  >
-                    Source Code
-                  </a>
-                </div>
-            </div>
+      {/* Image Header */}
+      <div className="w-full aspect-[4/3] relative z-10 border-b border-white/10 overflow-hidden bg-black">
+        {imgUrl ? (
+          <img src={imgUrl} alt={project.title} className="w-full h-full object-cover" loading="lazy" />
+        ) : (
+          <div className="w-full h-full bg-zinc-900 flex flex-col items-center justify-center text-zinc-700">
+            <span className="text-5xl mb-4 opacity-30">🖼️</span>
           </div>
+        )}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+      </div>
+
+      {/* Card Content */}
+      <div className="relative z-10 flex flex-col gap-4 p-6 bg-[#0a0a0a]/60 backdrop-blur-md">
+        <div>
+          <p className="text-[10px] font-bold tracking-[0.4em] text-yellow-400 uppercase mb-2">
+            Project {String(index + 1).padStart(2, '0')}
+          </p>
+          <h3 className="text-2xl font-black text-white">{project.title}</h3>
+        </div>
+
+        <p className="text-zinc-300 text-sm leading-relaxed">{project.description}</p>
+        
+        <div className="flex flex-wrap gap-2">
+          {project?.tech?.map((t: string, i: number) => (
+            <span key={i} className="px-2.5 py-1 text-[10px] font-bold text-yellow-400 bg-zinc-900 rounded-full border border-yellow-400/20">
+              {t}
+            </span>
+          ))}
+        </div>
+
+        {project.link ? (
+          <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-block w-full mt-2">
+            <StardustButton className="flex w-full justify-center items-center gap-2 uppercase tracking-widest font-bold text-sm py-3">
+              Live Demo <FiArrowUpRight className="text-lg" />
+            </StardustButton>
+          </a>
+        ) : (
+          <div className="inline-block w-full opacity-60 cursor-not-allowed mt-2">
+            <StardustButton className="flex w-full justify-center items-center gap-2 uppercase tracking-widest font-bold text-sm py-3 bg-zinc-800 text-zinc-400 border-zinc-700 hover:bg-zinc-800 hover:text-zinc-400 pointer-events-none">
+              Coming Soon <FiArrowUpRight className="text-lg" />
+            </StardustButton>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+// ─── Main Component ───────────────────────────────────────────────────────────
+export function FeaturedProjects() {
+  const projects = PROJECTS.filter(p => p.visible);
+
+  return (
+    <section className="relative w-full bg-[#0a0a0a] text-white border-t border-zinc-900/50">
+      <div className="absolute top-1/4 left-0 w-[40rem] h-[40rem] bg-yellow-500/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-0 w-[40rem] h-[40rem] bg-yellow-500/5 rounded-full blur-[150px] pointer-events-none" />
+
+      {/* Section header */}
+      <div className="relative z-10 max-w-5xl mx-auto text-center px-6 pt-24 pb-4">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-yellow-400 text-sm font-bold tracking-[0.4em] uppercase mb-4"
+        >
+          Portfolio
+        </motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="text-5xl md:text-7xl font-black text-white tracking-tight leading-none"
+        >
+          {SITE_CONTENT.featuredTitle}{' '}
+          <span className="text-yellow-400">Work</span>
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-6 text-zinc-400 text-lg max-w-xl mx-auto"
+        >
+          {SITE_CONTENT.featuredSubtitle}
+        </motion.p>
+      </div>
+
+      {/* Desktop parallax */}
+      <div className="hidden md:block">
+        {projects.map((project, index) => (
+          <ParallaxProjectBlock
+            key={project._id}
+            project={project}
+            index={index}
+            isLast={index === projects.length - 1}
+          />
+        ))}
+      </div>
+
+      {/* Mobile stacked */}
+      <div className="md:hidden flex flex-col gap-12 px-4 pb-16 pt-8">
+        {projects.map((project, index) => (
+          <MobileProjectCard key={project._id} project={project} index={index} />
         ))}
       </div>
     </section>
   );
-};
+}

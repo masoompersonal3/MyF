@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MinimalistHero } from './components/ui/minimalist-hero';
 import { TextType } from './components/ui/text-type';
 import RotatingText from './components/ui/rotating-text';
@@ -6,20 +6,17 @@ import { FeaturedProjects } from './components/FeaturedProjects';
 import { ExperienceTimeline } from './components/ExperienceTimeline';
 import { ContainerScroll } from './components/ui/container-scroll-animation';
 import { CosmicParallaxBg } from './components/ui/cosmic-parallax-bg';
-import { ToolsSection } from './components/ToolsSection';
+import { ToolsSection, techLogos } from './components/ToolsSection';
+import LogoLoop from './components/ui/LogoLoop';
 import { ContactSection } from './components/ContactSection';
 import { CinematicFooter } from './components/CinematicFooter';
 import { LoadingScreen } from './components/LoadingScreen';
 import { MobilePopup } from './components/MobilePopup';
-import { apiClient } from './api';
+import { SITE_CONTENT } from './data';
 
 const App = () => {
   const [loaded, setLoaded] = useState(false);
-  const [content, setContent] = useState<any>(null);
-
-  useEffect(() => {
-    apiClient.getContent().then(setContent).catch(console.error);
-  }, []);
+  const content = SITE_CONTENT;
 
   const navLinks = [
     { label: 'HOME', href: '#' },
@@ -38,9 +35,17 @@ const App = () => {
 
       {/* Main site - render always but hidden until loaded */}
       <div className={`flex flex-col bg-background w-full min-h-screen relative overflow-hidden transition-opacity duration-700 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
-        {/* Background Effect */}
+        {/* Fixed Starry Background Effect for the entire site */}
+        <div className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none">
+          <CosmicParallaxBg head="" text="" hideEarth={true} />
+        </div>
+
+        {/* Hero Earth Element (Scrolls with the page) */}
         <div className="absolute top-0 left-0 w-full h-screen z-0 pointer-events-none">
-          <CosmicParallaxBg head="" text="" />
+          <div id="horizon">
+            <div className="glow"></div>
+          </div>
+          <div id="earth"></div>
         </div>
 
         {/* Content */}
@@ -71,7 +76,7 @@ const App = () => {
           />
           
           {/* Scroll Animation Section positioned just below the hero title */}
-          <div id="work" className="relative w-full z-20 -mt-32 md:-mt-56">
+          <div id="work" className="relative w-full z-20 -mt-32 md:-mt-40">
             <ContainerScroll titleComponent={null}>
               <div className="flex flex-col h-full p-6 md:p-12 lg:p-16 bg-transparent">
                 {content?.aboutContent && (
@@ -89,7 +94,7 @@ const App = () => {
           </div>
 
           {/* Next Section: Featured Projects */}
-          <div id="projects" className="-mt-32 md:-mt-64 relative z-30">
+          <div id="projects" className="relative z-40 bg-[#0a0a0a] pt-10 -mt-72 md:pt-10 md:-mt-64">
             <FeaturedProjects />
           </div>
 
@@ -99,13 +104,21 @@ const App = () => {
           </div>
 
           {/* Next Section: Tools */}
-          <div className="relative z-40">
+          <div className="relative z-30 bg-transparent">
             <ToolsSection />
           </div>
 
-          {/* Next Section: Contact */}
-          <div id="contact" className="relative z-40">
-            <ContactSection />
+          {/* Contact Section Group - Pulled up to overlap behind the transparent corners of the Tools curve */}
+          <div id="contact" className="relative z-20 w-full -mt-[46vw]">
+            {/* Starry Background for the entire Contact area */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+              <CosmicParallaxBg head="" text="" hideEarth={true} />
+            </div>
+
+            {/* The actual Contact Form - pushed down so it doesn't overlap the tools visually */}
+            <div className="relative z-10 pt-[46vw]">
+              <ContactSection />
+            </div>
           </div>
         </div>
 
