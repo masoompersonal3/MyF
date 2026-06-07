@@ -32,7 +32,7 @@ export const ToolsSection = () => {
   return (
     <section className="relative w-full bg-transparent text-white pt-12 pb-0 flex flex-col items-center">
       {/* Top solid black block stretching from the top of the section to exactly above the 46vw container */}
-      <div className="absolute top-0 left-0 w-full bg-[#0a0a0a] z-0 bottom-[80vw] md:bottom-[46vw]" />
+      <div className="absolute top-0 left-0 w-full bg-[#0a0a0a] z-0 bottom-[100vw] md:bottom-[46vw]" />
 
       {/* Background Ambience */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[20rem] bg-zinc-800/20 rounded-[100%] blur-[120px] pointer-events-none" />
@@ -56,9 +56,9 @@ export const ToolsSection = () => {
       </div>
 
       {/* The massive downward semi-circle with LogoLoop sitting at its bottom */}
-      <div className="relative z-30 w-full overflow-hidden h-[80vw] md:h-[46vw] bg-transparent mt-4 sm:-mt-[15vw] md:-mt-[30vw] lg:-mt-[32vw]">
+      <div className="relative z-30 w-full overflow-hidden h-[100vw] md:h-[46vw] bg-transparent mt-4 sm:-mt-[15vw] md:-mt-[30vw] lg:-mt-[32vw]">
         {/* The Black Circle extending from ToolsSection */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[50%] w-[150vw] h-[160vw] md:w-[120vw] md:h-[92vw] bg-[#0a0a0a] rounded-[50%] shadow-[0_10px_50px_rgba(250,204,21,0.05)] border-b border-yellow-400/20" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[50%] w-[150vw] h-[200vw] md:w-[120vw] md:h-[92vw] bg-[#0a0a0a] rounded-[50%] shadow-[0_10px_50px_rgba(250,204,21,0.05)] border-b border-yellow-400/20" />
          
         {/* Logo Loop kept fixed relative to the heading, while the curve drops 6vw lower */}
         <div className="absolute bottom-[40px] md:bottom-[calc(6vw+13px)] left-0 w-full z-40 flex flex-col gap-6 md:gap-8">
