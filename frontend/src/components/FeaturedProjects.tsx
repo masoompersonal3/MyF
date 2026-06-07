@@ -176,14 +176,15 @@ const MobileProjectCard = ({ project, index }: { project: any; index: number }) 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="relative z-0 w-full flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-900 shadow-[inset_0_0_20px_rgba(255,255,255,0.05),inset_0_0_5px_rgba(255,255,255,0.1),0_20px_40px_rgba(0,0,0,0.4)]"
+      style={{ boxShadow: "inset 0 0 20px rgba(255, 255, 255, 0.192), inset 0 0 5px rgba(255, 255, 255, 0.274), 0 5px 5px rgba(0, 0, 0, 0.164)" }}
+      className="relative z-0 w-full flex flex-col overflow-hidden rounded-[2rem] border border-zinc-800 bg-zinc-900/20 backdrop-blur-md"
     >
       {/* Liquid Glass Overlay Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
       <div className="absolute inset-0 rounded-[2rem] border border-yellow-400/20 pointer-events-none shadow-[inset_0_0_30px_rgba(250,204,21,0.05)]" />
 
       {/* Image Header */}
-      <div className="w-full aspect-[4/3] relative z-10 border-b border-white/10 overflow-hidden bg-black">
+      <div className="w-full aspect-[4/3] relative z-10 border-b border-zinc-800 overflow-hidden bg-black">
         {imgUrl ? (
           <img src={imgUrl} alt={project.title} className="w-full h-full object-cover" loading="lazy" />
         ) : (
