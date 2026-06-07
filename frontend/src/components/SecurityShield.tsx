@@ -1,7 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const SecurityShield: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
+
   useEffect(() => {
+    // Advanced DevTools detection trick:
+    // If DevTools is open, the 'debugger' statement will pause execution.
+    // We measure the time it takes to execute a tiny block of code.
+    // If it takes significantly longer than usual, it means the debugger paused it!
+    const detectDevTools = () => {
+      const start = performance.now();
+      // eslint-disable-next-line no-debugger
+      debugger; 
+      const timeTaken = performance.now() - start;
+      
+      // If it takes more than 100ms, the debugger definitely caught it
+      if (timeTaken > 100) {
+        setIsDevToolsOpen(true);
+      } else {
+        setIsDevToolsOpen(false);
+      }
+    };
+
+    // Run the check every 500ms
+    const interval = setInterval(detectDevTools, 500);
+
     // Override console methods to prevent data leakage or debugging
     if (import.meta.env.PROD) {
       console.log = () => {};
@@ -64,12 +87,21 @@ export const SecurityShield: React.FC<{ children: React.ReactNode }> = ({ childr
     window.addEventListener('selectstart', handleSelectStart);
 
     return () => {
+      clearInterval(interval);
       window.removeEventListener('contextmenu', handleContextMenu);
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('dragstart', handleDragStart);
       window.removeEventListener('selectstart', handleSelectStart);
     };
   }, []);
+
+  if (isDevToolsOpen) {
+    return (
+      <div className="w-full h-screen bg-[#0a0a0a] flex items-center justify-center text-red-500 font-mono text-xl z-[9999] fixed inset-0">
+        DevTools usage is not allowed here. Please close the inspector to view the site.
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
